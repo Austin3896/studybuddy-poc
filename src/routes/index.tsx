@@ -1,24 +1,34 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "StudyBuddy" },
+      { name: "description", content: "StudyBuddy — a simple study companion proof of concept." },
+      { property: "og:title", content: "StudyBuddy" },
+      { property: "og:description", content: "StudyBuddy — a simple study companion proof of concept." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="w-full max-w-sm rounded-xl border bg-card p-8 text-center shadow-sm">
+        <h1 className="text-2xl font-bold text-card-foreground">StudyBuddy</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          A simple proof of concept with real sign-in.
+        </p>
+        <Link
+          to="/auth"
+          className="mt-6 inline-block w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          Sign in
+        </Link>
+      </div>
     </div>
   );
 }
