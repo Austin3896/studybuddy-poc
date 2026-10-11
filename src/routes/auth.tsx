@@ -25,21 +25,32 @@ function AuthPage() {
 
   // Runs when the form is submitted. On success we go to the dashboard;
   // on failure we show the error message returned by the auth server.
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
+async function handleLogin(e: React.FormEvent) {
+  e.preventDefault();
+  if (loading) return;
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+  setError(null);
+  setLoading(true);
 
-    setLoading(false);
-    if (error) {
-      setError(error.message); // e.g. "Invalid login credentials"
+  try {
+    const { error: loginError } =
+      await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+
+    if (loginError) {
+      setError(loginError.message);
       return;
     }
-    navigate({ to: "/dashboard" });
-  }
 
+    await navigate({ to: "/dashboard" });
+  } catch {
+    setError("Unable to sign in. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+}
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm rounded-xl border bg-card p-8 shadow-sm">
