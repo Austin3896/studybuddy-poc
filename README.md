@@ -1,6 +1,6 @@
 # StudyBuddy POC
 
-Build a small StudyBuddy proof of concept for a college project.
+StudyBuddy Proof of Concept
 
 Use React with TypeScript for the frontend and Supabase for real email/password authentication.
 
