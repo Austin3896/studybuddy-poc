@@ -1,40 +1,74 @@
-# StudyBuddy POC
+# StudyBuddy — Proof of Concept
 
-StudyBuddy Proof of Concept
+StudyBuddy is a study management application
+being developed by Team CodeNova for our capstone project.
 
-Use React with TypeScript for the frontend and Supabase for real email/password authentication.
+The full application is intended to help students organize courses,
+assignments and due dates. This proof of concept focuses on the
+login feature.
 
-Include only:
+## Proof-of-Concept Scope
 
-1. Login page with email and password.
+The implemented login flow includes:
 
-2. Error message for incorrect credentials.
+- Email and password sign-in.
+- An error message for incorrect credentials.
+- A protected dashboard displaying the signed-in user's email.
+- Logout to end the user's session.
+- Redirecting signed-out visitors to the login page.
 
-3. Protected dashboard showing the logged-in user's email.
+Course and assignment management are outside this proof of concept.
 
-4. Logout that ends the session.
+## Technology
 
-Keep the code simple for four beginner students to understand and edit. Explain the project files and framework. Provide instructions for creating a test account and connecting GitHub.
+- **Framework:** TanStack Start.
+- **User interface:** React 19.
+- **Programming language:** TypeScript.
+- **Authentication and backend:** Lovable Cloud, using Supabase technology.
+- **Version control and collaboration:** GitHub.
 
-Do not add other StudyBuddy features. If authentication setup is required, guide me through it instead of simulating a successful login.
+The initial application was generated with assistance from Lovable.
+Team members will review, test, and extend the code, documenting
+their individual contributions through GitHub commits.
 
-This project was built with [Lovable](https://lovable.dev).
+## Main Application Files
 
-## Build with Lovable
+| File | Purpose |
+|------|---------|
+| `src/routes/index.tsx` | Welcome page |
+| `src/routes/auth.tsx` | Login form and sign-in handling |
+| `src/routes/_authenticated/route.tsx` | Login check for protected pages |
+| `src/routes/_authenticated/dashboard.tsx` | Dashboard and logout |
+| `src/routes/__root.tsx` | Shared page structure |
+| `src/integrations/supabase/client.ts` | Authentication service connection |
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/2b79fbe4-4850-42e8-9571-72505687a248).
+## Creating a Test Account
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+In the Lovable project, open:
 
-## Development
+**Cloud → Users → Add User**
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Create a test account with an email and password, then use those
+credentials to test the login page. Do not commit passwords to GitHub.
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+## Testing the Feature
+
+1. Open the dashboard while signed out.
+   Expected result: redirect to the login page.
+2. Enter incorrect credentials.
+   Expected result: an error message.
+3. Enter valid test-account credentials.
+   Expected result: the dashboard opens and displays the user's email.
+4. Log out.
+   Expected result: return to the login page.
+5. Try opening the dashboard again.
+   Expected result: login is required.
+
+Record the actual results before the class demonstration.
+
+
+## Project Links
+
+- [Application source code](https://github.com/Darima1002/studybuddy-poc)
+- [CodeNova project documentation](https://github.com/Darima1002/CodeNova_Project)
+- [Lovable development workspace](https://lovable.dev/projects/2b79fbe4-4850-42e8-9571-72505687a248)
