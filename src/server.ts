@@ -41,7 +41,7 @@ function isH3SwallowedErrorBody(body: string): boolean {
     return payload.unhandled === true && payload.message === "HTTPError";
   } catch {
     return false;
-  }
+  } 
 }
 
 export default {
