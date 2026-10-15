@@ -1,0 +1,176 @@
+<!--This is a mockup for what the dashboard may look like after further development.-->
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StudyBuddy Dashboard Mockup</title>
+<style>
+  :root{
+    --bg:#f5f6fa; --card:#fff; --ink:#1f2433; --muted:#6b7285; --line:#e4e7ee;
+    --accent:#4f46e5; --accent-soft:#eef0ff; --today:#4f46e5;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  .banner{background:#fff7d6;border-bottom:1px solid #ecd98a;color:#6b5a14;font-size:13px;text-align:center;padding:6px 12px}
+  header{display:flex;justify-content:space-between;align-items:center;padding:16px 28px;background:var(--card);border-bottom:1px solid var(--line)}
+  header h1{margin:0;font-size:20px}
+  header .who{display:flex;gap:14px;align-items:center;font-size:14px;color:var(--muted)}
+  button{font:inherit;cursor:pointer}
+  .logout{border:1px solid var(--line);background:var(--card);padding:6px 12px;border-radius:8px;color:var(--ink)}
+  main{max-width:1100px;margin:24px auto;padding:0 20px;display:grid;grid-template-columns:minmax(320px,1.05fr) 1fr;gap:20px}
+  @media(max-width:820px){main{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .card h2{margin:0 0 12px;font-size:16px}
+  .cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .cal-head h2{margin:0}
+  .nav button{border:1px solid var(--line);background:var(--card);width:30px;height:30px;border-radius:8px}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+  .dow{font-size:11px;text-transform:uppercase;color:var(--muted);text-align:center;padding:4px 0}
+  .day{aspect-ratio:1/1;border:1px solid transparent;border-radius:10px;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:14px;color:var(--ink)}
+  .day:hover{background:var(--accent-soft)}
+  .day.out{color:#b5bac8}
+  .day.today{border-color:var(--today);font-weight:700}
+  .day.sel{background:var(--accent);color:#fff}
+  .dots{display:flex;gap:3px;height:6px}
+  .dot{width:6px;height:6px;border-radius:50%}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;font-size:12px;color:var(--muted)}
+  .legend span{display:flex;align-items:center;gap:5px}
+  .right{display:flex;flex-direction:column;gap:20px}
+  ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+  li.item{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+  li.item .bar{width:4px;align-self:stretch;border-radius:2px}
+  li.item .t{flex:1}
+  li.item .t b{display:block;font-size:14px}
+  li.item .t small{color:var(--muted);font-size:12px}
+  .pill{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+  .empty{color:var(--muted);font-size:14px;padding:8px 2px}
+  .sub{color:var(--muted);font-size:13px;margin:-6px 0 12px}
+</style>
+</head>
+<body>
+<div class="banner">Design mockup with sample data. Not connected to the real app or database.</div>
+<header>
+  <h1>StudyBuddy</h1>
+  <div class="who"><span>student@example.com</span><button class="logout">Log out</button></div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="cal-head">
+      <h2 id="monthLabel"></h2>
+      <div class="nav"><button id="prev" aria-label="Previous month">&lsaquo;</button> <button id="next" aria-label="Next month">&rsaquo;</button></div>
+    </div>
+    <div class="grid" id="dows"></div>
+    <div class="grid" id="days"></div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <div class="right">
+    <section class="card">
+      <h2 id="dueTitle">Due on this day</h2>
+      <p class="sub" id="dueSub"></p>
+      <ul id="dueList"></ul>
+    </section>
+    <section class="card">
+      <h2>Due in the next 7 days</h2>
+      <p class="sub">Assignments coming up after the selected day, with their class.</p>
+      <ul id="weekList"></ul>
+    </section>
+  </div>
+</main>
+
+<script>
+
+const classes = {
+  "Intro to AI":      "#4f46e5",
+  "Biology 101":      "#059669",
+  "Calculus II":      "#d97706",
+  "English Comp":     "#db2777",
+};
+const sample = [
+  {title:"Problem Canvas worksheet",  cls:"Intro to AI",  in:0},
+  {title:"Lab report: cell division", cls:"Biology 101",  in:0},
+  {title:"Reading response #4",       cls:"English Comp", in:1},
+  {title:"Problem set 6",             cls:"Calculus II",  in:2},
+  {title:"Quiz: NLP basics",          cls:"Intro to AI",  in:3},
+  {title:"Lab prep questions",        cls:"Biology 101",  in:5},
+  {title:"Essay draft",               cls:"English Comp", in:6},
+  {title:"Midterm review sheet",      cls:"Calculus II",  in:7},
+  {title:"Group project outline",     cls:"Intro to AI",  in:11},
+  {title:"Chapter 9 homework",        cls:"Biology 101",  in:16},
+  {title:"Problem set 7",             cls:"Calculus II",  in:-3},
+];
+
+const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const today = startOfDay(new Date());
+const addDays = (d,n) => new Date(d.getFullYear(), d.getMonth(), d.getDate()+n);
+const key = d => d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate();
+const items = sample.map(a => ({...a, date:addDays(today,a.in)}));
+const byDay = {};
+items.forEach(a => (byDay[key(a.date)] ||= []).push(a));
+
+let selected = today;
+let view = new Date(today.getFullYear(), today.getMonth(), 1);
+const fmt = d => d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
+
+function el(tag, cls, text){const e=document.createElement(tag); if(cls) e.className=cls; if(text!==undefined) e.textContent=text; return e;}
+
+function renderCalendar(){
+  document.getElementById("monthLabel").textContent = view.toLocaleDateString(undefined,{month:"long",year:"numeric"});
+  const dows = document.getElementById("dows"); dows.replaceChildren();
+  ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(n => dows.append(el("div","dow",n)));
+  const days = document.getElementById("days"); days.replaceChildren();
+  const first = new Date(view.getFullYear(), view.getMonth(), 1);
+  const start = addDays(first, -first.getDay());
+  for(let i=0;i<42;i++){
+    const d = addDays(start,i);
+    const b = el("button","day"); b.type="button";
+    if(d.getMonth()!==view.getMonth()) b.classList.add("out");
+    if(key(d)===key(today)) b.classList.add("today");
+    if(key(d)===key(selected)) b.classList.add("sel");
+    b.append(el("span",null,String(d.getDate())));
+    const dots = el("span","dots");
+    (byDay[key(d)]||[]).slice(0,3).forEach(a => { const x=el("i","dot"); x.style.background = key(d)===key(selected) ? "#fff" : classes[a.cls]; dots.append(x); });
+    b.append(dots);
+    b.onclick = () => { selected = d; renderAll(); };
+    days.append(b);
+  }
+}
+
+function itemRow(a, showDate){
+  const li = el("li","item");
+  const bar = el("span","bar"); bar.style.background = classes[a.cls];
+  const t = el("div","t"); t.append(el("b",null,a.title), el("small",null,a.cls + (showDate ? "  ·  due " + fmt(a.date) : "")));
+  li.append(bar, t, el("span","pill",a.cls));
+  return li;
+}
+
+function renderLists(){
+  const isToday = key(selected)===key(today);
+  document.getElementById("dueTitle").textContent = isToday ? "Due today" : "Due on " + fmt(selected);
+  document.getElementById("dueSub").textContent = fmt(selected);
+  const due = byDay[key(selected)] || [];
+  const dl = document.getElementById("dueList"); dl.replaceChildren();
+  if(!due.length) dl.append(el("li","empty","Nothing due on this day."));
+  due.forEach(a => dl.append(itemRow(a,false)));
+
+  const from = addDays(selected,1), to = addDays(selected,7);
+  const week = items.filter(a => a.date>=from && a.date<=to).sort((a,b)=>a.date-b.date);
+  const wl = document.getElementById("weekList"); wl.replaceChildren();
+  if(!week.length) wl.append(el("li","empty","Nothing due in the next 7 days."));
+  week.forEach(a => wl.append(itemRow(a,true)));
+}
+
+function renderLegend(){
+  const lg = document.getElementById("legend"); lg.replaceChildren();
+  Object.entries(classes).forEach(([n,c]) => { const s=el("span"); const d=el("i","dot"); d.style.background=c; s.append(d,n); lg.append(s); });
+}
+function renderAll(){ renderCalendar(); renderLists(); }
+document.getElementById("prev").onclick = () => { view = new Date(view.getFullYear(), view.getMonth()-1, 1); renderCalendar(); };
+document.getElementById("next").onclick = () => { view = new Date(view.getFullYear(), view.getMonth()+1, 1); renderCalendar(); };
+renderLegend(); renderAll();
+</script>
+</body>
+</html>
